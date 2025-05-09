@@ -21,6 +21,9 @@ class Booking(models.Model):
     end_time = models.DateTimeField()
     creation_time = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.user.username} - {self.room}"
+
     class Meta:
         verbose_name = "Booking"
         verbose_name_plural = "Bookings"

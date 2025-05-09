@@ -1,0 +1,12 @@
+{% extends "booking/base.html" %}
+{% block content %}
+    {{ render_string }}
+    {% if request.user.is_authenticated %}
+        <h1>HELLO authenticated USER</h1>
+    {% else %}
+        <h1>HELLO unauthenticated USER</h1>
+    {% endif %}
+    <a href="{% url 'rooms-list' %}">go to rooms list</a>
+    <br>
+    <a href="{% url 'book-room' %}">go to rooms booking</a>
+{% endblock %}
