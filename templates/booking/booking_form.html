@@ -1,16 +1,18 @@
 {% extends "booking/base.html" %}
 {% block content %}
-    <form method="post" action="{% url 'book-room' %}">
-        {% csrf_token %}
-            <label for="room-number">Room number:</label>
-            <input type="text" id="room-number" name="room-number">
-            <br>
+    <form method="POST" class="form-group">
+    {% csrf_token %}
+        <h1>{{ room.title }}</h1>
+        <h2>Capacity: {{room.capacity}}</h2>
+        <p>Location: {{room.location}}</p>
+        <dvi class="mb-3">
             <label for="start-time">Start-time:</label>
             <input type="datetime-local" id="start-time" name="start-time">
-            <br>
+        </dvi>
+        <dvi class="mb-3">
             <label for="end-time">End time:</label>
-            <input type="text" id="end-time" name="end-time">
-            <br>
-            <button type="submit">Book this room</button>
+            <input type="datetime-local" id="end-time" name="end-time">
+        </dvi>>
+        <button type="submit" class="btn btn-primary">Book this room</button>
     </form>
 {% endblock %}
