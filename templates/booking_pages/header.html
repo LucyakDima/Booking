@@ -1,0 +1,73 @@
+<style>
+:root {
+  --bg-color: white;
+  --text-color: black;
+  --input-bg: #ffffff;
+  --input-text: #000000;
+  --input-border: #ced4da;
+  --header-bg: #f8f9fa;
+}
+
+.dark-mode {
+  --bg-color: #1f1f1f;
+  --text-color: #ffffff;
+  --input-bg: #1e1e1e;
+  --input-text: #ffffff;
+  --input-border: #444444;
+  --header-bg: #1f1ff;
+}
+
+html, body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.5s, color 0.5s;
+}
+
+input, textarea, select {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--input-border);
+  transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+}
+
+h1, h2, h3, h4, h5, h6, p, a, span, div, button {
+  color: var(--text-color);
+}
+
+  header {
+    background-color: var(--header-bg);
+    color: var(--text-color);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--input-border);
+    transition: background-color 0.5s, color 0.5s;
+  }
+
+  .header-left h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+
+  .header-right {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .header-right button,
+  .header-right a {
+    transition: background-color 0.3s, color 0.3s;
+  }
+</style>
+
+<header>
+  <div class="header-left">
+    <h1>BOOKING SYSTEM</h1>
+  </div>
+  <div class="btn-group" role="group" aria-label="Basic outlined example">
+    <a href="{% url 'index' %}" class="btn btn-outline-primary">На головну</a>
+    <button onclick="toggleTheme()" class="btn btn-outline-primary">Змінити тему</button>
+  </div>
+</header>

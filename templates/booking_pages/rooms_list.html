@@ -1,0 +1,19 @@
+<style>
+     .shift-right{
+    margin-left: 1.5rem;
+       }
+</style>
+{% extends "booking_pages/base.html" %}
+{% block content %}
+    {% for room in rooms %}
+        <div class="shift-right">
+        <h1>{{ room.title }}</h1>
+        <h2>Capacity: {{room.capacity}}</h2>
+        <h2>Price: ${{room.price}}</h2>
+        <p>Location: {{room.location}}</p>
+
+        <a class="btn btn-primary" href="{% url 'book-room' location_id=room.id %}" >Book {{ room.title }}</a>
+        </div>
+        <hr>
+    {% endfor %}
+{% endblock %}

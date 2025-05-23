@@ -1,0 +1,18 @@
+<style>
+    .shift-right{
+    margin-left: 1.5rem;
+       }
+</style>
+{% extends "booking_pages/base.html" %}
+{% block content %}
+    <div class="shift-right">
+    {{ render_string }}
+    {% if request.user.is_authenticated %}
+        <h1>HELLO authenticated USER</h1>
+    {% else %}
+        <h1>HELLO unauthenticated USER</h1>
+    {% endif %}
+    <a class="btn btn-primary" href="{% url 'rooms-list' %}">go to rooms list</a>
+    </div>
+    <hr>
+{% endblock %}

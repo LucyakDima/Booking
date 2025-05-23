@@ -1,0 +1,29 @@
+<style>
+     .shift-right{
+    margin-left: 1.5rem;
+       }
+</style>
+{% extends "booking_pages/base.html" %}
+{% block content %}
+    <form method="POST" class="form-group">
+        {% csrf_token %}
+        <div class="shift-right">
+            <h1>{{ room.title }}</h1>
+            <h2>Capacity: {{ room.capacity }}</h2>
+            <p>Location: {{ room.location }}</p>
+
+            <div class="mb-3">
+                <label for="start_time">Start time:</label>
+                <input type="datetime-local" id="start_time" name="start_time" required>
+            </div>
+            <br>
+            <div class="mb-3">
+                <label for="end_time">End time:</label>
+                <input type="datetime-local" id="end_time" name="end_time" required>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Book this room</button>
+        </div>
+    </form>
+    <hr>
+{% endblock %}

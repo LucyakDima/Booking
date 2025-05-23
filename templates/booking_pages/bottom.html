@@ -1,0 +1,77 @@
+{% load static %}
+<style>
+body {
+    font-family: sans-serif;
+}
+
+  h3 {
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-top: 2rem;
+  }
+
+  .person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 180px;
+  }
+
+  .person-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+
+  .person img {
+    height: 250px;
+    width: 150px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.5rem;
+  }
+
+  .person a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: bold;
+  }
+
+  .person a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+
+<body>
+    <div>
+      <h3>Project "Booking system"</h3>
+      <div class="container">
+        <div class="person">
+          <div class="person-title">Creator:</div>
+          <img src="{% static 'img/kit.png' %}">
+          <a href="#">Луцяк Дмитро</a>
+        </div>
+        <div class="person">
+          <div class="person-title">Publisher:</div>
+          <img src="{% static 'img/Magan.png' %}">
+          <a href="#">Денис</a>
+            <p>(той що вчитель)</p>
+        </div>
+      </div>
+    </div>
+</body>
+
+
+
+
+
+
+
+

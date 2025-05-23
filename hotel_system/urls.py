@@ -21,3 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("booking.urls")),
 ]
+
+# handler404 = 'django.views.defaults.page_not_found'
+handler404 = 'booking.views.custom_404_view'

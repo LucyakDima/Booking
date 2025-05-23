@@ -4,10 +4,11 @@ from django.contrib.auth.models import User
 class Room(models.Model):
     title = models.CharField(max_length=50)
     capacity = models.IntegerField()
+    price = models.IntegerField(default=0)
     location = models.TextField()
 
     def __str__(self):
-        return f"Room #{self.title} - {self.capacity}"
+        return f"Room #{self.title} - {self.capacity} - ${self.price}"
 
     class Meta:
         verbose_name = "Room"
@@ -22,7 +23,7 @@ class Booking(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.room}"
+        return f"{self.user.username} - {self.room} - ${self.room.price}"
 
     class Meta:
         verbose_name = "Booking"
