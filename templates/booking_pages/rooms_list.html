@@ -1,19 +1,58 @@
 <style>
-     .shift-right{
-    margin-left: 1.5rem;
-       }
+    .shift {
+        margin-left: 1.5rem;
+        margin-top: 0.5rem;
+    }
 </style>
+
 {% extends "booking_pages/base.html" %}
 {% block content %}
-    {% for room in rooms %}
-        <div class="shift-right">
-        <h1>{{ room.title }}</h1>
-        <h2>Capacity: {{room.capacity}}</h2>
-        <h2>Price: ${{room.price}}</h2>
-        <p>Location: {{room.location}}</p>
-
-        <a class="btn btn-primary" href="{% url 'book-room' location_id=room.id %}" >Book {{ room.title }}</a>
+<form method="GET" action="{% url 'rooms-list' %}">
+    <div class="shift">
+        <div class="btn-group">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Price
+            </button>
+            <ul class="dropdown-menu">
+                <li><span class="dropdown-item-text">Оберіть ціну</span></li>
+                <li>
+                    <input type="number" name="min_price" min="0" placeholder="Від" />
+                </li>
+                <li>
+                    <input type="number" name="max_price" min="0" placeholder="До" />
+                </li>
+            </ul>
         </div>
-        <hr>
-    {% endfor %}
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Capacity
+            </button>
+            <ul class="dropdown-menu">
+                <li><span class="dropdown-item-text">Кількість жителів</span></li>
+                <li>
+                    <input type="number" name="capacity_min" min="0" placeholder="Від" />
+                </li>
+                <li>
+                    <input type="number" name="capacity_max" min="0" placeholder="До" />
+                </li>
+            </ul>
+        </div>
+        <button type="submit" class="btn btn-primary">Фільтрувати</button>
+        <a class="btn btn-danger" href="{% url 'rooms-list' %}">Скинути фільтри</a>
+    </div>
+    <hr>
+</form>
+
+{% for room in rooms %}
+    <div class="shift">
+        <h1>{{ room.title }}</h1>
+        <h2>Capacity: {{ room.capacity }}</h2>
+        <h2>Price: ${{ room.price }}</h2>
+        <p>Location: {{ room.location }}</p>
+
+        <a class="btn btn-primary" href="{% url 'book-room' location_id=room.id %}">Book {{ room.title }}</a>
+    </div>
+    <hr>
+{% endfor %}
 {% endblock %}

@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from booking.models import Room, Booking
 from django.http import HttpResponse
 from datetime import datetime
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
 
 def index(request):
     rooms = Room.objects.all()
@@ -13,6 +15,25 @@ def index(request):
 
 def room_list(request):
     rooms = Room.objects.all()
+
+    # Отримання параметрів фільтрації з GET-запиту
+    capacity_min = request.GET.get('capacity_min')
+    capacity_max = request.GET.get('capacity_max')
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+
+    # Фільтрація за ємністю
+    if capacity_min:
+        rooms = rooms.filter(capacity__gte=capacity_min)
+    if capacity_max:
+        rooms = rooms.filter(capacity__lte=capacity_max)
+
+    # Фільтрація за ціною
+    if min_price:
+        rooms = rooms.filter(price__gte=min_price)
+    if max_price:
+        rooms = rooms.filter(price__lte=max_price)
+
     context = {
         "rooms": rooms,
     }
@@ -49,5 +70,6 @@ def booking_details(request, pk):
     except Booking.DoesNotExist:
         return HttpResponse("This booking doesn't exist", status=404)
 
+
 def custom_404_view(request, exception):
-    return render(request, 'booking_pages/404.html', status=404)
+    return render(request, '404.html', status=404)

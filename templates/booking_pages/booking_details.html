@@ -1,7 +1,17 @@
+<style>
+    .text-box {
+        text-align: center;
+    }
+</style>
 {% extends "booking_pages/base.html" %}
 {% block content %}
+<div class="text-box">
     <h1>Booking #{{ booking.id }}</h1>
     <p>User: {{ booking.user.username }}</p>
     <p>Room: {{ booking.room }} </p>
     <p>Time range: {{ booking.start_time }} - {{ booking.end_time }} </p>
+    <button type="button" class="btn btn-primary">Send Confirmation Email</button>
+    <hr>
+</div>
 {% endblock %}
+

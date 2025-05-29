@@ -9,5 +9,4 @@ urlpatterns = [
    path("booking-details/<int:pk>/", views.booking_details, name="booking-details"),
 ]
 
-handler404 = views.custom_404_view
 

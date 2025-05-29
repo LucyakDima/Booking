@@ -1,15 +1,18 @@
 {% load static %}
 <style>
-body {
+body, html{
     font-family: sans-serif;
+    background-color: var(--bg-color);
+    transition: background-color 0.5s, color 0.5s;
 }
 
   h3 {
     text-align: center;
     margin-top: 2rem;
+    margin-top: auto;
   }
 
-  .container {
+.container {
     display: flex;
     justify-content: center;
     gap: 4rem;
@@ -31,7 +34,7 @@ body {
 
   .person img {
     height: 250px;
-    width: 150px;
+    width: 190px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 0.5rem;
@@ -67,6 +70,7 @@ body {
       </div>
     </div>
 </body>
+
 
 
 

@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.conf import settings
+
 
 class Room(models.Model):
     title = models.CharField(max_length=50)
@@ -16,11 +18,12 @@ class Room(models.Model):
         ordering = ["title"]
 
 class Booking(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bookings")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="bookings")
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="bookings")
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     creation_time = models.DateTimeField(auto_now_add=True)
+    email = models.EmailField(default='example@example.com')
 
     def __str__(self):
         return f"{self.user.username} - {self.room} - ${self.room.price}"
