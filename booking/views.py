@@ -45,6 +45,10 @@ def book_room(request, location_id):
         start_time_str = request.POST.get("start_time")
         end_time_str = request.POST.get("end_time")
 
+        # Обчислення тривалості бронювання в годинах
+        duration = (end_time_str - start_time_str).total_seconds() / 3600  # Перетворення в години
+        total_price = room.price * duration  # Загальна ціна
+
         start_time = datetime.fromisoformat(start_time_str)
         end_time = datetime.fromisoformat(end_time_str)
         booking = Booking.objects.create(
@@ -53,7 +57,7 @@ def book_room(request, location_id):
             start_time=start_time,
             end_time=end_time
         )
-        return redirect("booking-details", pk=booking.id)
+        return redirect("booking-details", pk=booking.id, total_price=total_price)
     else:
         context = {
             "room": room
@@ -63,8 +67,12 @@ def book_room(request, location_id):
 def booking_details(request, pk):
     try:
         booking = Booking.objects.get(id=pk)
+        # Обчислення загальної ціни
+        total_price = booking.room.price * (booking.end_time - booking.start_time).total_seconds() / 3600
+
         context = {
-            "booking": booking
+            "booking": booking,
+            "total_price": total_price,
         }
         return render(request, template_name="booking_pages/booking_details.html", context=context)
     except Booking.DoesNotExist:

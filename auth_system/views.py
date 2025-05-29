@@ -7,6 +7,8 @@ from datetime import datetime
 # from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate
 from auth_system.forms import CustomUserCreationForm
+from django.contrib.auth import logout
+
 
 def register(request):
     if request.method == "POST":
@@ -27,6 +29,9 @@ def register(request):
         context={"form": form},
     )
 
+def logout_view(request):
+    logout(request)
+    return redirect("index")
 
 # def login(request):
 #     if request.method == "POST":

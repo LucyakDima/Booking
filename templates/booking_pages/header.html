@@ -14,7 +14,7 @@
   --input-bg: #1e1e1e;
   --input-text: #ffffff;
   --input-border: #444444;
-  --header-bg: #1f1ff;
+  --header-bg: #1f1f1f;
 }
 
 html, body {
@@ -34,33 +34,43 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
   color: var(--text-color);
 }
 
-  header {
-    background-color: var(--header-bg);
-    color: var(--text-color);
-    padding: 1rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--input-border);
-    transition: background-color 0.5s, color 0.5s;
-  }
+header {
+  background-color: var(--header-bg);
+  color: var(--text-color);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--input-border);
+  transition: background-color 0.5s, color 0.5s;
+  position: fixed; /* Фіксує заголовок на екрані */
+  top: 0; /* Встановлює заголовок на верхню частину вікна */
+  left: 0; /* Вирівнює заголовок з лівого краю */
+  width: 100%; /* Задає ширину заголовка на всю ширину вікна */
+  z-index: 1000; /* Забезпечує, що заголовок буде поверх інших елементів */
+}
 
-  .header-left h1 {
-    margin: 0;
-    font-size: 1.8rem;
-    font-weight: bold;
-  }
+.header-left h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
 
-  .header-right {
-    display: flex;
-    gap: 0.5rem;
-  }
+.header-right {
+  display: flex;
+  gap: 0.5rem;
+}
 
-  .header-right button,
-  .header-right a {
-    transition: background-color 0.3s, color 0.3s;
-  }
+.header-right button,
+.header-right a {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+main {
+  padding-top: 90px;
+}
 </style>
+
 
 <header>
   <div class="header-left">
@@ -71,4 +81,10 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     <a href="{% url 'register' %}" class="btn btn-outline-primary">Зареєструватися</a>
     <button onclick="toggleTheme()" class="btn btn-outline-primary">Змінити тему</button>
   </div>
+  {% if user.is_authenticated %}
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Logout</button>
+      </form>
+    {% endif %}
 </header>
