@@ -16,19 +16,16 @@ def index(request):
 def room_list(request):
     rooms = Room.objects.all()
 
-    # Отримання параметрів фільтрації з GET-запиту
     capacity_min = request.GET.get('capacity_min')
     capacity_max = request.GET.get('capacity_max')
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
 
-    # Фільтрація за ємністю
     if capacity_min:
         rooms = rooms.filter(capacity__gte=capacity_min)
     if capacity_max:
         rooms = rooms.filter(capacity__lte=capacity_max)
 
-    # Фільтрація за ціною
     if min_price:
         rooms = rooms.filter(price__gte=min_price)
     if max_price:
@@ -45,8 +42,11 @@ def book_room(request, location_id):
         start_time_str = request.POST.get("start_time")
         end_time_str = request.POST.get("end_time")
 
+        start_time = datetime.fromisoformat(start_time_str)
+        end_time = datetime.fromisoformat(end_time_str)
+
         # Обчислення тривалості бронювання в годинах
-        duration = (end_time_str - start_time_str).total_seconds() / 3600  # Перетворення в години
+        duration = (end_time - start_time).total_seconds() / 3600  # Перетворення в години
         total_price = room.price * duration  # Загальна ціна
 
         start_time = datetime.fromisoformat(start_time_str)
@@ -57,7 +57,7 @@ def book_room(request, location_id):
             start_time=start_time,
             end_time=end_time
         )
-        return redirect("booking-details", pk=booking.id, total_price=total_price)
+        return redirect("booking-details", pk=booking.id)
     else:
         context = {
             "room": room
@@ -81,3 +81,8 @@ def booking_details(request, pk):
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
+
+def cancel_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    booking.delete()
+    return redirect("rooms-list")
