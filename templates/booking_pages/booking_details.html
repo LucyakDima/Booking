@@ -17,11 +17,12 @@
     <p>Time range: {{ booking.start_time }} - {{ booking.end_time }} </p>
     <p>Total price: ${{ total_price }}</p>
     <div class="g">
-    <button type="button" class="btn btn-primary">Send Confirmation Email</button>
-        <form method="POST" action="{% url 'cancel-booking' booking.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Cancel booking</button>
-        </form>
+        <div class="pd">
+            <form method="POST" action="{% url 'cancel-booking' booking.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Cancel booking</button>
+            </form>
+        </div>
     </div>
     <hr>
 </div>

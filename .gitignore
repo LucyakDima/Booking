@@ -1,3 +1,4 @@
 /myvenv/
 db.sqlite3
 list.txt
+.env

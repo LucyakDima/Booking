@@ -17,6 +17,14 @@ class Room(models.Model):
         verbose_name_plural = "Rooms"
         ordering = ["title"]
 
+
+class RoomImage(models.Model):
+    room = models.ForeignKey(Room, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='room_images/')
+
+    def __str__(self):
+        return f"Image for {self.room.title}"
+
 class Booking(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="bookings")
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="bookings")

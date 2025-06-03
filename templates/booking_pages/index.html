@@ -8,7 +8,7 @@
     <div class="shift-right">
     {{ render_string }}
     {% if request.user.is_authenticated %}
-        <h1>HELLO authenticated USER</h1>
+        <h1>HELLO {{ user.username }}!</h1>
     {% else %}
         <h1>HELLO unauthenticated USER</h1>
     {% endif %}

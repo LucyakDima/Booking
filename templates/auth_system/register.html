@@ -38,6 +38,12 @@ padding-top: 1rem;
 height: 110%;
 background-color: #ccc;
 }
+
+  .have_profile{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px
+  }
 </style>
 
 <body>
@@ -55,6 +61,7 @@ background-color: #ccc;
             <button class="btn btn-primary w-100" type="submit">Зареєструватися</button>
           </form>
         </div>
+        <div class="have_profile"><a href="{% url 'login_request' %}">Вже маєте акаунт?</a></div>
       </div>
     </div>
   </div>

@@ -8,3 +8,6 @@ class CustomUserCreationForm (UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ('username', 'email','phone_number', 'first_name', 'last_name', 'password1', 'password2')
+
+class EmailLoginForm(forms.Form):
+    email = forms.EmailField(label="Email", required=True)

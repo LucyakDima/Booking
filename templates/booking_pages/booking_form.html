@@ -1,7 +1,7 @@
 <style>
-     .shift-right{
-    margin-left: 1.5rem;
-       }
+    .shift-right {
+        margin-left: 1.5rem;
+    }
 </style>
 {% extends "booking_pages/base.html" %}
 {% block content %}
@@ -11,6 +11,12 @@
             <h1>{{ room.title }}</h1>
             <h2>Capacity: {{ room.capacity }}</h2>
             <p>Location: {{ room.location }}</p>
+
+            {% if message %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endif %}
 
             <div class="mb-3">
                 <label for="start_time">Start time:</label>
@@ -22,7 +28,11 @@
                 <input type="datetime-local" id="end_time" name="end_time" required>
             </div>
             <br>
-            <button type="submit" class="btn btn-primary">Book this room</button>
+            {% if request.user.is_authenticated %}
+                <button type="submit" class="btn btn-primary">Book this room</button>
+            {% else %}
+                <button type="button" class="btn btn-primary" disabled>Book this room</button>
+            {% endif %}
         </div>
     </form>
     <hr>

@@ -72,6 +72,12 @@ header {
 main {
   padding-top: 90px;
 }
+
+.pd {display: flex;
+  gap: 0.5rem;
+}
+
+.btn{height: 40px;}
 </style>
 
 
@@ -79,15 +85,24 @@ main {
   <div class="header-left">
     <h1>BOOKING SYSTEM</h1>
   </div>
-  <div class="btn-group" role="group" aria-label="Basic outlined example">
-    <a href="{% url 'index' %}" class="btn btn-outline-primary">На головну</a>
-    <a href="{% url 'register' %}" class="btn btn-outline-primary">Зареєструватися</a>
-    <button onclick="toggleTheme()" class="btn btn-outline-primary">Змінити тему</button>
-  </div>
   {% if user.is_authenticated %}
+  <div class="btn-group" role="group" aria-label="Basic outlined example">
+    <div class="pd">
+      <a href="{% url 'index' %}" class="btn btn-outline-primary">На головну</a>
       <form method="POST" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Logout</button>
+        <button type="submit" class="btn btn-outline-danger">Logout</button>
       </form>
-    {% endif %}
+      <button onclick="toggleTheme()" class="btn btn-outline-primary">Змінити тему</button>
+    </div>
+  </div>
+  {% else %}
+  <div class="btn-group" role="group" aria-label="Basic outlined example">
+    <div class="pd">
+      <a href="{% url 'index' %}" class="btn btn-outline-primary">На головну</a>
+      <a href="{% url 'register' %}" class="btn btn-outline-primary">Зареєструватися</a>
+      <button onclick="toggleTheme()" class="btn btn-outline-primary">Змінити тему</button>
+    </div>
+  </div>
+  {% endif %}
 </header>
