@@ -16,7 +16,14 @@
           <h4>Вхід</h4>
         </div>
         <div class="card-body">
-          <form method="post">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+          <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
             <button class="btn btn-primary w-100" type="submit">Надіслати посилання для входу</button>

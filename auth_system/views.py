@@ -10,6 +10,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from .forms import EmailLoginForm
+from django.conf import settings
 
 
 User = get_user_model()
@@ -55,13 +56,13 @@ def login_request_view(request):
                 send_mail(
                     'Ваш лінк для входу',
                     f'Натисніть на посилання для входу: {login_url}',
-                    'super_patscan@ukr.net',
+                    settings.EMAIL_HOST_USER,
                     [email],
                     fail_silently=False,
                 )
-                messages.success(request, 'Лист із посиланням для входу надіслано.')
+                messages.success(request, 'Посилання для входу надіслано на вашу пошту.')
             except User.DoesNotExist:
-                messages.error(request, 'Користувача з такою поштою не знайдено.')
+                messages.error(request, 'Користувача з такою електронною поштою не знайдено.')
     else:
         form = EmailLoginForm()
 
