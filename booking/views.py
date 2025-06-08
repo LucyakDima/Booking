@@ -103,3 +103,7 @@ def cancel_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     booking.delete()
     return redirect("rooms-list")
+
+def booking_rooms_list(request):
+    bookings = Booking.objects.filter(user=request.user).select_related("room")
+    return render(request, "booking_pages/booking_list.html", {"bookings": bookings})

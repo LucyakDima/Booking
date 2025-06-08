@@ -13,6 +13,9 @@
         <h1>HELLO unauthenticated USER</h1>
     {% endif %}
     <a class="btn btn-primary" href="{% url 'rooms-list' %}">go to rooms list</a>
+    {% if request.user.is_authenticated %}
+        <a class="btn btn-primary" href="{% url 'booking-list' %}">go to booked rooms list</a>
+    {% endif %}
     </div>
     <hr>
 {% endblock %}
