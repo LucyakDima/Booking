@@ -9,6 +9,8 @@ urlpatterns = [
    path("room/<int:location_id>/", views.book_room, name="book-room"),
    path("booking-details/<int:pk>/", views.booking_details, name="booking-details"),
    path("cancel-booking/<int:booking_id>/", views.cancel_booking, name="cancel-booking"),
+   path("booking/<int:booking_id>/send-confirmation/", views.send_confirmation_link, name="send-confirmation-link"),
+   path("booking/confirm/<uidb64>/<token>/", views.confirm_booking, name="confirm-booking"),
 ]
 
 

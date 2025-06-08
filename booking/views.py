@@ -4,6 +4,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from booking.models import Room, Booking
 from django.http import HttpResponse
 from datetime import datetime
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.conf import settings
+from django.urls import reverse
+
 
 def index(request):
     rooms = Room.objects.all()
@@ -26,6 +33,11 @@ def room_list(request):
         start_time = datetime.fromisoformat(start_time_str)
         end_time = datetime.fromisoformat(end_time_str)
 
+        now = datetime.now()
+        if start_time < now or end_time < now:
+            messages.error(request, "Не можна шукати кімнати у минулому.")
+            return redirect("rooms-list")
+
         booked_rooms = Booking.objects.filter(
             start_time__lt=end_time,
             end_time__gt=start_time
@@ -46,40 +58,52 @@ def room_list(request):
     }
     return render(request, template_name="booking_pages/rooms_list.html", context=context)
 
+from datetime import datetime
+
 def book_room(request, location_id):
     room = get_object_or_404(Room, pk=location_id)
     message = None
     if request.method == "POST":
         start_time_str = request.POST.get("start_time")
         end_time_str = request.POST.get("end_time")
-
-        start_time = datetime.fromisoformat(start_time_str)
-        end_time = datetime.fromisoformat(end_time_str)
-
-        if end_time < start_time:
-            message = "Дата закінчення бронювання не може бути раніше дати початку."
-        else:
-            existing_bookings = Booking.objects.filter(room=room, start_time__lt=end_time, end_time__gt=start_time)
-            if existing_bookings.exists():
-                next_available_date = existing_bookings.order_by('end_time').first().end_time
-                message = f"Кімната вже заброньована. Вона звільниться {next_available_date}."
+        try:
+            start_time = datetime.fromisoformat(start_time_str)
+            end_time = datetime.fromisoformat(end_time_str)
+            now = datetime.now()
+            if start_time < now or end_time < now:
+                message = "Неможливо забронювати на час, який уже минув."
+            elif end_time <= start_time:
+                message = "Дата закінчення бронювання не може бути раніше або рівна даті початку."
             else:
-                duration = (end_time - start_time).total_seconds() / 3600
-                total_price = room.price * duration
-
-                booking = Booking.objects.create(
-                    user=request.user,
+                existing_bookings = Booking.objects.filter(
                     room=room,
-                    start_time=start_time,
-                    end_time=end_time
+                    start_time__lt=end_time,
+                    end_time__gt=start_time
                 )
-                return redirect("booking-details", pk=booking.id)
+                if existing_bookings.exists():
+                    next_available_date = existing_bookings.order_by('end_time').first().end_time
+                    message = f"Кімната вже заброньована. Вона звільниться {next_available_date}."
+                else:
+                    duration = (end_time - start_time).total_seconds() / 3600
+                    total_price = room.price * duration
+
+                    booking = Booking.objects.create(
+                        user=request.user,
+                        room=room,
+                        start_time=start_time,
+                        end_time=end_time
+                    )
+                    return redirect("booking-details", pk=booking.id)
+
+        except ValueError:
+            message = "Неправильний формат дати й часу."
 
     context = {
         "room": room,
         "message": message
     }
     return render(request, template_name="booking_pages/booking_form.html", context=context)
+
 
 
 def booking_details(request, pk):
@@ -107,3 +131,36 @@ def cancel_booking(request, booking_id):
 def booking_rooms_list(request):
     bookings = Booking.objects.filter(user=request.user).select_related("room")
     return render(request, "booking_pages/booking_list.html", {"bookings": bookings})
+
+
+def send_confirmation_link(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    token = default_token_generator.make_token(booking.user)
+    uid = urlsafe_base64_encode(force_bytes(booking.pk))
+    confirm_url = request.build_absolute_uri(reverse('confirm-booking', kwargs={'uidb64': uid, 'token': token}))
+    send_mail(
+        'Підтвердження бронювання',
+        f'Натисніть для підтвердження бронювання: {confirm_url}',
+        settings.EMAIL_HOST_USER,
+        [booking.email],
+        fail_silently=False,
+    )
+
+    messages.success(request, 'Посилання для підтвердження надіслано на пошту.')
+    return redirect('booking-details', pk=booking_id)
+
+def confirm_booking(request, uidb64, token):
+    try:
+        booking_id = force_str(urlsafe_base64_decode(uidb64))
+        booking = Booking.objects.get(pk=booking_id)
+    except (TypeError, ValueError, OverflowError, Booking.DoesNotExist):
+        booking = None
+
+    if booking and default_token_generator.check_token(booking.user, token):
+        booking.is_confirm = True
+        booking.save()
+        messages.success(request, 'Бронювання підтверджено.')
+        return redirect('booking-list')
+    else:
+        messages.error(request, 'Посилання недійсне або протерміноване.')
+        return redirect('booking-details', pk=booking_id if booking else 1)

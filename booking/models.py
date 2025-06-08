@@ -32,6 +32,7 @@ class Booking(models.Model):
     end_time = models.DateTimeField()
     creation_time = models.DateTimeField(auto_now_add=True)
     email = models.EmailField(default='example@example.com')
+    is_confirm = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username} - {self.room} - ${self.room.price}"

@@ -16,12 +16,29 @@
     <p>Room: {{ booking.room }} </p>
     <p>Time range: {{ booking.start_time }} - {{ booking.end_time }} </p>
     <p>Total price: ${{ total_price }}</p>
+    <p>Status: {% if booking.is_confirm %}
+        <strong style="color: green;">Confirmed</strong>
+    {% else %}<strong style="color: red;">Not Confirmed</strong>
+    {% endif %}</p>
+    <p>{% if messages %}
+            <div class="alert alert-info" role="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}</p>
     <div class="g">
         <div class="pd">
             <form method="POST" action="{% url 'cancel-booking' booking.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Cancel booking</button>
             </form>
+            {% if not booking.is_confirm %}
+                <form method="post" action="{% url 'send-confirmation-link' booking.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                </form>
+            {% endif %}
         </div>
     </div>
     <hr>
